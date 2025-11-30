@@ -8,3 +8,5 @@ spec:
   interval: 1h
   # Wichtig: Registry-URL OHNE Chart-Namen
   url: oci://registry-1.docker.io/envoyproxy
+  secretRef:
+    name: dockerhub-secret 
