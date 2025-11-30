@@ -5,7 +5,6 @@ resources:
   - gateway
   - metallb
   - envoy-gateway
-  - cert-manager
   # später hier ergänzen:
   # - cert-manager
   # - logging
