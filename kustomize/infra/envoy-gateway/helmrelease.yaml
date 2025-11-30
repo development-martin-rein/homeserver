@@ -10,7 +10,9 @@ spec:
 
   chart:
     spec:
+      # Das ist der Chartname im Repo envoyproxy/gateway-helm
       chart: gateway-helm
+      # Tag so wie in der offiziellen Doku und auf Docker Hub
       version: v1.6.0
       sourceRef:
         kind: HelmRepository
@@ -22,6 +24,6 @@ spec:
     createNamespace: true
 
   values:
-    # Envoy Proxy Service soll von MetalLB eine externe IP bekommen
+    # Der von Envoy erzeugte EnvoyProxy Service soll eine LoadBalancer-IP bekommen
     service:
       type: LoadBalancer
