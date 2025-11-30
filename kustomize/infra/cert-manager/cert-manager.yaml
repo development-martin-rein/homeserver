@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cert-manager          # Name für die Deployment-Ressource hinzufügen
+  name: cert-manager
   namespace: cert-manager
   labels:
     app: cert-manager
@@ -28,13 +28,13 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: cert-manager          # Name für die ServiceAccount-Ressource hinzufügen
+  name: cert-manager
   namespace: cert-manager
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: cert-manager          # Name für die ClusterRole-Ressource hinzufügen
+  name: cert-manager
 rules:
 - apiGroups: [""]
   resources: ["secrets"]
@@ -43,7 +43,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: cert-manager          # Name für die ClusterRoleBinding-Ressource hinzufügen
+  name: cert-manager
 subjects:
 - kind: ServiceAccount
   name: cert-manager
@@ -52,8 +52,3 @@ roleRef:
   kind: ClusterRole
   name: cert-manager
   apiGroup: rbac.authorization.k8s.io
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: cert-manager          # Der Namespace für Cert-Manager
