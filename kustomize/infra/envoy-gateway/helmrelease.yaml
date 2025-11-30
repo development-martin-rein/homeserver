@@ -1,0 +1,17 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: envoy-gateway
+  namespace: flux-system
+spec:
+  targetNamespace: envoy-gateway-system
+  install:
+    createNamespace: true
+  chart:
+    spec:
+      chart: gateway-helm
+      version: "*"
+      sourceRef:
+        kind: HelmRepository
+        name: envoy-gateway
+  interval: 5m
