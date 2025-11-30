@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cert-manager
+  name: cert-manager          # Name für die Deployment-Ressource hinzufügen
   namespace: cert-manager
   labels:
     app: cert-manager
@@ -28,24 +28,22 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: cert-manager
+  name: cert-manager          # Name für die ServiceAccount-Ressource hinzufügen
   namespace: cert-manager
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  rules:
-  - apiGroups:
-    - ""
-    resources:
-    - secrets
-    verbs:
-    - "*"
+  name: cert-manager          # Name für die ClusterRole-Ressource hinzufügen
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["*"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: cert-manager
+  name: cert-manager          # Name für die ClusterRoleBinding-Ressource hinzufügen
 subjects:
 - kind: ServiceAccount
   name: cert-manager
@@ -58,27 +56,4 @@ roleRef:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: cert-manager
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: cert-manager-webhook
-  namespace: cert-manager
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: cert-manager-webhook
-  template:
-    metadata:
-      labels:
-        app: cert-manager-webhook
-    spec:
-      containers:
-      - name: webhook
-        image: quay.io/jetstack/cert-manager-webhook:v1.9.1
-        imagePullPolicy: Always
-        volumeMounts:
-        - mountPath: /etc/cert-manager
-          name: cert-manager
+  name: cert-manager          # Der Namespace für Cert-Manager
