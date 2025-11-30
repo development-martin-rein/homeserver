@@ -4,9 +4,17 @@ metadata:
   name: envoy-gateway
   namespace: flux-system
 spec:
+  interval: 10m
+  releaseName: envoy-gateway
   targetNamespace: envoy-gateway-system
+
   install:
     createNamespace: true
+
+  upgrade:
+    remediation:
+      retry: 3
+
   chart:
     spec:
       chart: gateway-helm
@@ -14,4 +22,11 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: envoy-gateway
-  interval: 5m
+        namespace: flux-system
+      interval: 30m
+
+  values:
+    envoyGateway:
+      proxy:
+        service:
+          type: LoadBalancer
