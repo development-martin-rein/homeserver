@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - gateway
+  - metallb
   # später hier ergänzen:
   # - cert-manager
   # - logging
