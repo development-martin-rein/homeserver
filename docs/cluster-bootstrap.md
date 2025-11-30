@@ -98,3 +98,7 @@ nextcloud.staging.home.lan (Staging)
 nextcloud.home.lan (Production)
 
 Voraussetzung ist, dass die DNS Einträge im Heimnetz auf die LoadBalancer IP des Gateways zeigen, die MetalLB vergeben hat.
+
+Cert-Manager:
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml
+

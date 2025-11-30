@@ -14,8 +14,9 @@ case "$answer" in
   * ) echo "Abgebrochen."; exit 0;;
 esac
 
+
 echo
-echo "1/3) Prüfe aktuellen Kubernetes Kontext..."
+echo "1) Prüfe aktuellen Kubernetes Kontext..."
 kubectl config current-context || {
   echo "Fehler: Kein gültiger Kubernetes Kontext gefunden."
   exit 1
@@ -25,8 +26,9 @@ kubectl get nodes -o wide || {
   exit 1
 }
 
+
 echo
-echo "2/3) Installiere Gateway API CRDs (standard-install)..."
+echo "2) Installiere Gateway API CRDs (standard-install)..."
 kubectl apply --server-side -f \
   https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
 
@@ -36,8 +38,9 @@ kubectl get crds | grep gateway.networking.k8s.io || {
   echo "Warnung: Gateway API CRDs wurden nicht gefunden."
 }
 
+
 echo
-echo "3/3) Installiere MetalLB (Controller + Speaker + CRDs)..."
+echo "3) Installiere MetalLB (Controller + Speaker + CRDs)..."
 kubectl apply -f \
   https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
 
@@ -46,6 +49,19 @@ echo "   → Warte auf MetalLB Pods im Namespace metallb-system..."
 kubectl wait --namespace metallb-system \
   --for=condition=Available deploy/controller \
   --timeout=180s || echo "Hinweis: controller Deployment nicht rechtzeitig Ready."
+
+
+echo
+echo "4) Installiere CertManager"
+kubectl apply -f \
+  https://github.com/jetstack/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml
+
+echo
+echo "   → Warte auf cert-manger im Namespace"
+kubectl wait --namespace cert-manager \
+  --for=condition=Available deploy/controller \
+  --timeout=180s || echo "Hinweis: controller Deployment nicht rechtzeitig Ready."
+
 
 kubectl get pods -n metallb-system
 
