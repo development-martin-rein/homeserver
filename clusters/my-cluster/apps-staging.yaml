@@ -1,0 +1,17 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-staging
+  namespace: flux-system
+spec:
+  interval: 10m
+  retryInterval: 2m
+  wait: true
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kustomize/staging
+  dependsOn:
+    - name: cluster-infra       # erst Infra, dann Staging-Anwendungen
+  timeout: 10m

@@ -2,9 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nextcloud
-  namespace: nextcloud-staging
+  namespace: nextcloud-production
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: nextcloud
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: nextcloud
-          image: nextcloud:latest
+          image: nextcloud:29.0.1
           ports:
             - containerPort: 80
           # hier kommen deine Volumes, Environment Variablen, Datenbank usw. dazu
