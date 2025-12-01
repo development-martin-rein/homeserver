@@ -4,3 +4,5 @@ metadata:
   name: cert-manager
   labels:
     app.kubernetes.io/name: cert-manager
+    kustomize.toolkit.fluxcd.io/name: cluster-infra
+    kustomize.toolkit.fluxcd.io/namespace: flux-system
