@@ -5,16 +5,24 @@ metadata:
   namespace: longhorn-system
 spec:
   interval: 30m
+  timeout: 15m           # längerer Timeout für die Installation
   chart:
     spec:
       chart: longhorn
-      version: 1.7.2           # Version bei Bedarf anpassen
+      version: 1.7.2
       sourceRef:
         kind: HelmRepository
         name: longhorn
         namespace: flux-system
   install:
     createNamespace: false
+    remediation:
+      retries: 3
+    disableWait: true    # WICHTIG: nicht ewig auf Health warten
+  upgrade:
+    remediation:
+      retries: 3
+    disableWait: true    # WICHTIG: auch bei Upgrades nicht festhängen
   values:
     defaultSettings:
       defaultDataPath: /var/lib/longhorn

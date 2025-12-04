@@ -214,3 +214,25 @@ kubectl create secret generic nextcloud-mariadb \
   --from-literal=username=nextcloud \
   --from-literal=password='DEIN_STAGING_PASSWORT<--VERÄNDERN' \
   --from-literal=root-password='DEIN_STAGING_ROOT_PASSWORT<--VERÄNDERN'
+
+## Longhorn 
+auf dem Host des Clusters open-iscsi installieren.
+###Erklärung
+open-iscsi ist ein Linux-Paket, das den iSCSI-Client bereitstellt.
+Es enthält das Programm iscsiadm, das Longhorn benötigt, um Volumes auf deinem Host einzuhängen.
+
+Longhorn funktioniert so:
+
+Longhorn erzeugt verteilte Block-Volumes (über Longhorn-Manager).
+
+Um ein Volume einem Pod bereitzustellen, muss der Knoten selbst das Volume einhängen.
+
+Dafür verwendet Longhorn den iSCSI-Protokoll-Stack von Linux.
+### Befehle
+sudo apt update
+sudo apt install -y open-iscsi nfs-common
+sudo systemctl enable --now iscsid
+#### Longhorn neustarten:
+kubectl rollout restart daemonset longhorn-manager -n longhorn-system
+kubectl rollout restart deployment longhorn-driver-deployer -n longhorn-system
+
