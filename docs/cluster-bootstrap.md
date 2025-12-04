@@ -4,7 +4,7 @@ Dieses Dokument beschreibt die Schritte, um ein frisches k3s Cluster mit diesem 
 
 ---
 
-## 1. k3s installieren
+## k3s installieren
 
 Auf dem Zielsystem:
 
@@ -20,7 +20,7 @@ sudo chown "$USER:$USER" ~/.kube/config
 kubectl config current-context
 kubectl get nodes -o wide
 
-2. Flux installieren und mit GitHub Repository verbinden
+##Flux installieren und mit GitHub Repository verbinden
 
 Flux Command Line Interface installieren:
 ```bash
@@ -44,14 +44,14 @@ kubectl get pods -n flux-system
 flux get kustomizations -A
 
 
-3. Gateway API CRDs installieren
+## Gateway API CRDs installieren
 kubectl apply --server-side -f \
   https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
 
 Prüfen:
 kubectl get crds | grep gateway.networking.k8s.io
 
-4. MetalLB installieren
+##MetalLB installieren
 
 MetalLB stellt für Services vom Typ LoadBalancer IP-Adressen im Heimnetz bereit.
 
@@ -64,7 +64,7 @@ kubectl get pods -n metallb-system
 
 Die eigentliche Konfiguration von MetalLB (IPAddressPool, L2Advertisement) liegt im Git Repository unter kustomize/infra/metallb/ und wird durch die Flux Kustomization cluster-infra automatisch angewendet.
 
-5. Secrets und Passwörter anlegen
+##Secrets und Passwörter anlegen
 
 Bestimmte Konfigurationen enthalten Passwörter oder andere Geheimnisse und dürfen nicht im Repository liegen.
 
@@ -82,7 +82,17 @@ kubectl create secret generic nextcloud-admin-secret \
 
 Die dazugehörigen Deployments referenzieren diese Secrets über envFrom oder env.
 
-6. Überprüfen, ob alles läuft
+## Nötigen rechte vergeben
+'''bash
+kubectl create clusterrolebinding source-controller-admin \
+  --clusterrole=cluster-admin \
+  --serviceaccount=flux-system:source-controller
+
+kubectl create clusterrolebinding cert-manager-controller-admin \
+  --clusterrole=cluster-admin \
+  --serviceaccount=cert-manager:cert-manager
+
+##Überprüfen, ob alles läuft
 flux get kustomizations -A
 
 kubectl get pods -A
@@ -102,3 +112,18 @@ Voraussetzung ist, dass die DNS Einträge im Heimnetz auf die LoadBalancer IP de
 Cert-Manager:
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml
 
+DNS ohne DNS SERVER lokal
+
+Windows
+C:\Windows\System32\drivers\etc\hosts
+
+Eintrag hinzufügen:
+192.168.178.241  nextcloud.home.lan
+192.168.178.241  nextcloud.staging.home.lan
+
+Linux / Mac
+sudo nano /etc/hosts
+
+Eintrag:
+192.168.178.241 nextcloud.home.lan
+192.168.178.241 nextcloud.staging.home.lan
