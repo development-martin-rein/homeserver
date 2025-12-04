@@ -1,48 +1,49 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nextcloud
+  name: mariadb-nextcloud
   namespace: nextcloud-production
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: nextcloud
+      app: mariadb-nextcloud
   template:
     metadata:
       labels:
-        app: nextcloud
+        app: mariadb-nextcloud
     spec:
       containers:
-        - name: nextcloud
-          image: nextcloud:29.0.1
-          ports:
-            - containerPort: 80
+        - name: mariadb
+          image: mariadb:11.4
           env:
-            - name: MYSQL_HOST
-              value: mariadb-nextcloud
-            - name: MYSQL_DATABASE
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: nextcloud-mariadb
+                  key: root-password
+            - name: MARIADB_DATABASE
               valueFrom:
                 secretKeyRef:
                   name: nextcloud-mariadb
                   key: database
-            - name: MYSQL_USER
+            - name: MARIADB_USER
               valueFrom:
                 secretKeyRef:
                   name: nextcloud-mariadb
                   key: username
-            - name: MYSQL_PASSWORD
+            - name: MARIADB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: nextcloud-mariadb
                   key: password
-            # Optional:
-            # - name: NEXTCLOUD_TRUSTED_DOMAINS
-            #   value: "nextcloud.home.lan"
+          ports:
+            - containerPort: 3306
+              name: mysql
           volumeMounts:
-            - name: nextcloud-data
-              mountPath: /var/www/html
+            - name: mariadb-data
+              mountPath: /var/lib/mysql
       volumes:
-        - name: nextcloud-data
+        - name: mariadb-data
           persistentVolumeClaim:
-            claimName: nextcloud-data
+            claimName: mariadb-data

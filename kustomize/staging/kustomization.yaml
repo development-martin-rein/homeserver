@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - nextcloud
+  - mariadb-nextcloud
   # später:
   # - gitlab
 

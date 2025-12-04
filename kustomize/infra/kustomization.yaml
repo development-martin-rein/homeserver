@@ -6,6 +6,7 @@ resources:
   - metallb
   - envoy-gateway
   - cert-manager
+  - longhorn
   # später hier ergänzen:
   # - cert-manager
   # - logging

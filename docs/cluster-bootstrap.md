@@ -92,6 +92,22 @@ kubectl create clusterrolebinding cert-manager-controller-admin \
   --clusterrole=cluster-admin \
   --serviceaccount=cert-manager:cert-manager
 
+kubectl create clusterrolebinding helm-controller-admin \
+  --clusterrole=cluster-admin \
+  --serviceaccount=flux-system:helm-controller
+
+kubectl create clusterrolebinding notification-controller-admin \
+  --clusterrole=cluster-admin \
+  --serviceaccount=flux-system:notification-controller
+
+kubectl create clusterrolebinding metrics-server-admin \
+  --clusterrole=cluster-admin \
+  --serviceaccount=kube-system:metrics-server
+
+kubectl create clusterrolebinding metallb-speaker-admin \
+  --clusterrole=cluster-admin \
+  --serviceaccount=metallb-system:metallb-speaker
+
 ##Überprüfen, ob alles läuft
 flux get kustomizations -A
 
@@ -118,12 +134,83 @@ Windows
 C:\Windows\System32\drivers\etc\hosts
 
 Eintrag hinzufügen:
-192.168.178.241  nextcloud.home.lan
-192.168.178.241  nextcloud.staging.home.lan
+192.168.178.240  nextcloud.home.lan
+192.168.178.240  nextcloud.staging.home.lan
 
 Linux / Mac
 sudo nano /etc/hosts
 
 Eintrag:
-192.168.178.241 nextcloud.home.lan
-192.168.178.241 nextcloud.staging.home.lan
+192.168.178.240 nextcloud.home.lan
+192.168.178.240 nextcloud.staging.home.lan
+
+## setzten von umgebungsvariablen 
+### kopieren k3s.yaml 
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/configfile/k3s.yaml 
+### setzten der rechte im configfile/k3s.yaml verzeichniss
+sudo chown user:user k3s.yaml
+sudo chmod 600 k3s.yaml
+### setzten umgebungsvariable
+sudo nano etc/environment 
+#### eintragen
+    KUBECONFIG="/home/-!-ersetzte hier userverzeichnissname-!-/.kube/configfile/k3s.yaml"
+
+## aufsetzten eines pod reset scriptes nach eine neustart
+reset-script siehe scripts/reset-cluster.sh
+
+## aufsetzten eines reset-cluster.service
+sudo nano /etc/systemd/system/reset-cluster.service
+
+####inhalt
+[Unit]
+Description=Reset Kubernetes cluster pods after boot
+After=network-online.target k3s.service
+Wants=network-online.target k3s.service
+
+[Service]
+Type=oneshot
+User=homeserver
+Group=homeserver
+
+# Verzögerung, damit Kubernetes vollständig läuft
+#                      sekunden setzten hier zB 30 wann das script nach start des Servers ausgeführt werden soll. Wenn direkt bei start läuft der cluster nicht sauber an.       
+ExecStartPre=/bin/sleep 30 
+
+ExecStart=/home/homeserver/homeserver/docs/scripts/reset-cluster.sh
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
+
+## Befehle zum Service
+### Aktivieren
+sudo systemctl enable reset-cluster.service
+sudo systemctl start reset-cluster.service
+### Status Prüfen
+sudo systemctl status reset-cluster.service -l
+journalctl -xeu reset-cluster.service
+### Deaktivieren 
+sudo systemctl disable reset-cluster.service
+sudo systemctl stop reset-cluster.service
+### Units im BetriebsSystem neuladen
+sudo systemctl daemon-reload
+
+
+### mariadb
+Secretanlegen:
+
+# Production
+kubectl create secret generic nextcloud-mariadb \
+  -n nextcloud-production \
+  --from-literal=database=nextcloud \
+  --from-literal=username=nextcloud \
+  --from-literal=password='DEIN_STARKES_PASSWORT<--VERÄNDERN' \
+  --from-literal=root-password='DEIN_ROOT_PASSWORT<--VERÄNDERN'
+
+# Staging
+kubectl create secret generic nextcloud-mariadb \
+  -n nextcloud-staging \
+  --from-literal=database=nextcloud_staging \
+  --from-literal=username=nextcloud \
+  --from-literal=password='DEIN_STAGING_PASSWORT<--VERÄNDERN' \
+  --from-literal=root-password='DEIN_STAGING_ROOT_PASSWORT<--VERÄNDERN'
