@@ -1,70 +1,129 @@
-# Cluster Bootstrap Anleitung
+Cluster Bootstrap Anleitung
 
 Dieses Dokument beschreibt die Schritte, um ein frisches k3s Cluster mit diesem Repository zu verbinden und alle erforderlichen Infrastrukturkomponenten zu installieren.
 
----
+Inhaltsverzeichnis
 
-## k3s installieren
+Voraussetzungen
 
-Auf dem Zielsystem:
+k3s installieren
 
-```bash
+Kubeconfig einrichten
+
+Flux installieren und Repository bootstrappen
+
+Gateway Application Programming Interface Custom Resource Definitions installieren
+
+MetalLB installieren
+
+Secrets und Passwörter anlegen
+
+Notwendige Rechte vergeben
+
+Cert-Manager Custom Resource Definitions installieren
+
+Domainnamen ohne lokalen Domain Name System Server
+
+KUBECONFIG dauerhaft setzen
+
+Pod Reset nach Neustart automatisieren
+
+Longhorn Host Voraussetzungen
+
+Gesamtstatus prüfen
+
+Voraussetzungen
+
+Linux Zielsystem für den k3s Server
+
+Netzwerkzugriff auf GitHub
+
+GitHub Personal Access Token mit Zugriff auf das Repository
+
+Dieses Repository ist erreichbar (GitHub) und Flux darf darauf zugreifen
+
+k3s installieren
+
+k3s installieren und Traefik deaktivieren:
+
 curl -sfL https://get.k3s.io | sudo INSTALL_K3S_EXEC="server --disable traefik" sh -
 
-Kubeconfig einrichten:
-```bash
- 
+Kubeconfig einrichten
+
+Kubeconfig ins Benutzerverzeichnis kopieren und Rechte setzen:
+
 mkdir -p ~/.kube
 sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
 sudo chown "$USER:$USER" ~/.kube/config
+chmod 600 ~/.kube/config
+
+Prüfen:
+
 kubectl config current-context
 kubectl get nodes -o wide
 
-##Flux installieren und mit GitHub Repository verbinden
+Flux installieren und Repository bootstrappen
+Flux Command Line Interface installieren
 
-Flux Command Line Interface installieren:
-```bash
 curl -s https://fluxcd.io/install.sh | sudo bash
 flux --version
 
-```bash direkt und in der .bashrc anhängen 
-export GITHUB_USER="development-martin-rein" #hier muss dein git nutzer name stehen stehen 
-export GITHUB_TOKEN="DEIN_TOKEN_HIER"        #hier muss dein gittoken rein
+Umgebungsvariablen setzen
 
-Flux bootstrappen:
+Für die aktuelle Sitzung:
+
+export GITHUB_USER="development-martin-rein"
+export GITHUB_TOKEN="DEIN_TOKEN_HIER"
+
+Optional dauerhaft in der Shell Konfiguration speichern:
+
+echo 'export GITHUB_USER="development-martin-rein"' >> ~/.bashrc
+echo 'export GITHUB_TOKEN="DEIN_TOKEN_HIER"' >> ~/.bashrc
+source ~/.bashrc
+
+Flux bootstrappen
+
 flux bootstrap github \
-  --owner=$GITHUB_USER \
-  --repository=homeserver \
-  --branch=main \
-  --path=clusters/my-cluster \
-  --personal
+--owner="$GITHUB_USER" \
+--repository="homeserver" \
+--branch="main" \
+--path="clusters/my-cluster" \
+--personal
 
 Status prüfen:
+
 kubectl get pods -n flux-system
 flux get kustomizations -A
 
+Gateway Application Programming Interface Custom Resource Definitions installieren
 
-## Gateway API CRDs installieren
-kubectl apply --server-side -f \
-  https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
+Gateway Application Programming Interface Custom Resource Definitions installieren:
+
+kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.4.0/standard-install.yaml
 
 Prüfen:
+
 kubectl get crds | grep gateway.networking.k8s.io
 
-##MetalLB installieren
+MetalLB installieren
 
-MetalLB stellt für Services vom Typ LoadBalancer IP-Adressen im Heimnetz bereit.
+MetalLB stellt für Services vom Typ LoadBalancer Internet Protocol Adressen im Heimnetz bereit.
 
-Basisinstallation (Controller + Speaker + CRDs):
-kubectl apply -f \
-  https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
+Basisinstallation:
+
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
 
 Pods prüfen:
+
 kubectl get pods -n metallb-system
 
-Die eigentliche Konfiguration von MetalLB (IPAddressPool, L2Advertisement) liegt im Git Repository unter kustomize/infra/metallb/ und wird durch die Flux Kustomization cluster-infra automatisch angewendet.
+Hinweis zur Konfiguration:
 
-##Secrets und Passwörter anlegen
+Die eigentliche MetalLB Konfiguration (IPAddressPool, L2Advertisement) liegt im Repository unter kustomize/infra/metallb/
+
+Sie wird durch die Flux Kustomization cluster-infra automatisch angewendet
+
+Secrets und Passwörter anlegen
 
 Bestimmte Konfigurationen enthalten Passwörter oder andere Geheimnisse und dürfen nicht im Repository liegen.
 
@@ -72,96 +131,127 @@ Beispiele:
 
 Nextcloud Administrator Passwort
 
-Datenbank Zugangsdaten (falls verwendet)
+Datenbank Zugangsdaten
 
-Die Secrets werden mit kubectl angelegt. Beispiel:
+Nextcloud Administrator Secret
+
+Beispiel (Production):
+
 kubectl create secret generic nextcloud-admin-secret \
-  --from-literal=admin-user="DEIN_BENUTZER" \
-  --from-literal=admin-password="DEIN_PASSWORT" \
-  -n nextcloud-production
+--from-literal=admin-user="DEIN_BENUTZER" \
+--from-literal=admin-password="DEIN_PASSWORT" \
+-n nextcloud-production
 
-Die dazugehörigen Deployments referenzieren diese Secrets über envFrom oder env.
+MariaDB Secrets
 
-## Nötigen rechte vergeben
-'''bash
+Production:
+
+kubectl create secret generic nextcloud-mariadb \
+-n nextcloud-production \
+--from-literal=database=nextcloud \
+--from-literal=username=nextcloud \
+--from-literal=password='DEIN_STARKES_PASSWORT' \
+--from-literal=root-password='DEIN_ROOT_PASSWORT'
+
+Staging:
+
+kubectl create secret generic nextcloud-mariadb \
+-n nextcloud-staging \
+--from-literal=database=nextcloud_staging \
+--from-literal=username=nextcloud \
+--from-literal=password='DEIN_STAGING_PASSWORT' \
+--from-literal=root-password='DEIN_STAGING_ROOT_PASSWORT'
+
+Notwendige Rechte vergeben
+
+Clusterrolebindings anlegen:
+
 kubectl create clusterrolebinding source-controller-admin \
-  --clusterrole=cluster-admin \
-  --serviceaccount=flux-system:source-controller
+--clusterrole=cluster-admin \
+--serviceaccount=flux-system:source-controller
 
 kubectl create clusterrolebinding cert-manager-controller-admin \
-  --clusterrole=cluster-admin \
-  --serviceaccount=cert-manager:cert-manager
+--clusterrole=cluster-admin \
+--serviceaccount=cert-manager:cert-manager
 
 kubectl create clusterrolebinding helm-controller-admin \
-  --clusterrole=cluster-admin \
-  --serviceaccount=flux-system:helm-controller
+--clusterrole=cluster-admin \
+--serviceaccount=flux-system:helm-controller
 
 kubectl create clusterrolebinding notification-controller-admin \
-  --clusterrole=cluster-admin \
-  --serviceaccount=flux-system:notification-controller
+--clusterrole=cluster-admin \
+--serviceaccount=flux-system:notification-controller
 
 kubectl create clusterrolebinding metrics-server-admin \
-  --clusterrole=cluster-admin \
-  --serviceaccount=kube-system:metrics-server
+--clusterrole=cluster-admin \
+--serviceaccount=kube-system:metrics-server
 
 kubectl create clusterrolebinding metallb-speaker-admin \
-  --clusterrole=cluster-admin \
-  --serviceaccount=metallb-system:metallb-speaker
+--clusterrole=cluster-admin \
+--serviceaccount=metallb-system:metallb-speaker
 
-##Überprüfen, ob alles läuft
-flux get kustomizations -A
+Cert-Manager Custom Resource Definitions installieren
 
-kubectl get pods -A
-
-kubectl get gatewayclass
-kubectl get gateway -A
-kubectl get httproute -A
-
-Nextcloud sollte erreichbar sein über:
-
-nextcloud.staging.home.lan (Staging)
-
-nextcloud.home.lan (Production)
-
-Voraussetzung ist, dass die DNS Einträge im Heimnetz auf die LoadBalancer IP des Gateways zeigen, die MetalLB vergeben hat.
-
-Cert-Manager:
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.9.1/cert-manager.crds.yaml
 
-DNS ohne DNS SERVER lokal
+Domainnamen ohne lokalen Domain Name System Server
+
+Wenn kein Domain Name System Server im Heimnetz existiert, können Domainnamen lokal über die Hosts-Datei aufgelöst werden.
 
 Windows
+
+Pfad:
+
 C:\Windows\System32\drivers\etc\hosts
 
-Eintrag hinzufügen:
-192.168.178.240  nextcloud.home.lan
-192.168.178.240  nextcloud.staging.home.lan
+Einträge hinzufügen:
 
-Linux / Mac
-sudo nano /etc/hosts
-
-Eintrag:
 192.168.178.240 nextcloud.home.lan
 192.168.178.240 nextcloud.staging.home.lan
 
-## setzten von umgebungsvariablen 
-### kopieren k3s.yaml 
-sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/configfile/k3s.yaml 
-### setzten der rechte im configfile/k3s.yaml verzeichniss
-sudo chown user:user k3s.yaml
-sudo chmod 600 k3s.yaml
-### setzten umgebungsvariable
-sudo nano etc/environment 
-#### eintragen
-    KUBECONFIG="/home/-!-ersetzte hier userverzeichnissname-!-/.kube/configfile/k3s.yaml"
+Linux oder macOS
 
-## aufsetzten eines pod reset scriptes nach eine neustart
-reset-script siehe scripts/reset-cluster.sh
+Hosts-Datei bearbeiten:
 
-## aufsetzten eines reset-cluster.service
+sudo nano /etc/hosts
+
+Einträge:
+
+192.168.178.240 nextcloud.home.lan
+192.168.178.240 nextcloud.staging.home.lan
+
+KUBECONFIG dauerhaft setzen
+k3s.yaml kopieren
+
+mkdir -p ~/.kube/configfile
+sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/configfile/k3s.yaml
+
+Rechte setzen
+
+sudo chown "$USER:$USER" ~/.kube/configfile/k3s.yaml
+chmod 600 ~/.kube/configfile/k3s.yaml
+
+Umgebungsvariable in /etc/environment setzen
+
+sudo nano /etc/environment
+
+Eintragen (Benutzerverzeichnis anpassen):
+
+KUBECONFIG="/home/DEIN_BENUTZER/.kube/configfile/k3s.yaml"
+
+Pod Reset nach Neustart automatisieren
+Reset Skript
+
+Reset Skript liegt unter docs/scripts/reset-cluster.sh
+
+systemd Service erstellen
+
+Service Datei anlegen:
+
 sudo nano /etc/systemd/system/reset-cluster.service
 
-####inhalt
+Inhalt (komplett kopierbar, als Textblock):
+
 [Unit]
 Description=Reset Kubernetes cluster pods after boot
 After=network-online.target k3s.service
@@ -171,68 +261,71 @@ Wants=network-online.target k3s.service
 Type=oneshot
 User=homeserver
 Group=homeserver
-
-# Verzögerung, damit Kubernetes vollständig läuft
-#                      sekunden setzten hier zB 30 wann das script nach start des Servers ausgeführt werden soll. Wenn direkt bei start läuft der cluster nicht sauber an.       
-ExecStartPre=/bin/sleep 30 
-
+ExecStartPre=/bin/sleep 30
 ExecStart=/home/homeserver/homeserver/docs/scripts/reset-cluster.sh
 RemainAfterExit=no
 
 [Install]
 WantedBy=multi-user.target
 
-## Befehle zum Service
-### Aktivieren
-sudo systemctl enable reset-cluster.service
-sudo systemctl start reset-cluster.service
-### Status Prüfen
-sudo systemctl status reset-cluster.service -l
-journalctl -xeu reset-cluster.service
-### Deaktivieren 
-sudo systemctl disable reset-cluster.service
-sudo systemctl stop reset-cluster.service
-### Units im BetriebsSystem neuladen
+Units neu laden:
+
 sudo systemctl daemon-reload
 
+Aktivieren und starten:
 
-### mariadb
-Secretanlegen:
+sudo systemctl enable reset-cluster.service
+sudo systemctl start reset-cluster.service
 
-# Production
-kubectl create secret generic nextcloud-mariadb \
-  -n nextcloud-production \
-  --from-literal=database=nextcloud \
-  --from-literal=username=nextcloud \
-  --from-literal=password='DEIN_STARKES_PASSWORT<--VERÄNDERN' \
-  --from-literal=root-password='DEIN_ROOT_PASSWORT<--VERÄNDERN'
+Status prüfen:
 
-# Staging
-kubectl create secret generic nextcloud-mariadb \
-  -n nextcloud-staging \
-  --from-literal=database=nextcloud_staging \
-  --from-literal=username=nextcloud \
-  --from-literal=password='DEIN_STAGING_PASSWORT<--VERÄNDERN' \
-  --from-literal=root-password='DEIN_STAGING_ROOT_PASSWORT<--VERÄNDERN'
+sudo systemctl status reset-cluster.service -l
+journalctl -xeu reset-cluster.service
 
-## Longhorn 
-auf dem Host des Clusters open-iscsi installieren.
-###Erklärung
-open-iscsi ist ein Linux-Paket, das den iSCSI-Client bereitstellt.
-Es enthält das Programm iscsiadm, das Longhorn benötigt, um Volumes auf deinem Host einzuhängen.
+Deaktivieren und stoppen:
 
-Longhorn funktioniert so:
+sudo systemctl disable reset-cluster.service
+sudo systemctl stop reset-cluster.service
 
-Longhorn erzeugt verteilte Block-Volumes (über Longhorn-Manager).
+Longhorn Host Voraussetzungen
 
-Um ein Volume einem Pod bereitzustellen, muss der Knoten selbst das Volume einhängen.
+Auf den Cluster Hosts open-iscsi installieren (Longhorn benötigt iSCSI für das Einhängen der Volumes).
 
-Dafür verwendet Longhorn den iSCSI-Protokoll-Stack von Linux.
-### Befehle
+Pakete installieren und Dienst aktivieren:
+
 sudo apt update
 sudo apt install -y open-iscsi nfs-common
 sudo systemctl enable --now iscsid
-#### Longhorn neustarten:
+
+Longhorn Komponenten neu starten:
+
 kubectl rollout restart daemonset longhorn-manager -n longhorn-system
 kubectl rollout restart deployment longhorn-driver-deployer -n longhorn-system
 
+Gesamtstatus prüfen
+
+Flux Status:
+
+flux get kustomizations -A
+
+Pods im gesamten Cluster:
+
+kubectl get pods -A
+
+Gateway Ressourcen:
+
+kubectl get gatewayclass
+kubectl get gateway -A
+kubectl get httproute -A
+
+Nextcloud Erreichbarkeit
+
+Nextcloud sollte erreichbar sein über:
+
+nextcloud.staging.home.lan (Staging)
+
+nextcloud.home.lan (Production)
+
+Voraussetzung:
+
+Domainnamen müssen auf die LoadBalancer Internet Protocol Adresse des Gateways zeigen, die MetalLB vergeben hat.
