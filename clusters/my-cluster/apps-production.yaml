@@ -15,4 +15,4 @@ spec:
   dependsOn:
     - name: cluster-infra
     - name: cluster-apps-staging
-  timeout: 10m
+  timeout: 30m
