@@ -1,0 +1,89 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gitlab
+  namespace: gitlab-production
+spec:
+  interval: 30m
+  timeout: 20m
+  chart:
+    spec:
+      chart: gitlab
+      sourceRef:
+        kind: HelmRepository
+        name: gitlab
+        namespace: gitlab-production
+      interval: 12h
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    global:
+      edition: ce
+
+      hosts:
+        domain: system
+        https: false
+        gitlab:
+          name: gitlab.system
+
+      ingress:
+        enabled: false
+        configureCertmanager: false
+        tls:
+          enabled: false
+
+      storage:
+        class: longhorn
+
+    certmanager:
+      install: false
+
+    nginx-ingress:
+      enabled: false
+
+    prometheus:
+      install: false
+
+    gitlab-runner:
+      install: false
+
+    registry:
+      enabled: false
+
+    gitlab:
+      webservice:
+        minReplicas: 1
+        maxReplicas: 1
+
+      sidekiq:
+        minReplicas: 1
+        maxReplicas: 1
+
+      gitaly:
+        persistence:
+          storageClass: longhorn
+          size: 50Gi
+
+      toolbox:
+        persistence:
+          storageClass: longhorn
+          size: 10Gi
+
+    postgresql:
+      install: true
+      primary:
+        persistence:
+          storageClass: longhorn
+          size: 20Gi
+
+    redis:
+      install: true
+
+    minio:
+      persistence:
+        storageClass: longhorn
+        size: 20Gi
