@@ -36,8 +36,13 @@ spec:
         tls:
           enabled: false
 
+      gatewayApi:
+        configureCertmanager: false
+
       storage:
         class: longhorn
+
+    installCertmanager: false
 
     nginx-ingress:
       enabled: false
