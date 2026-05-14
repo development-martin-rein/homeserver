@@ -7,9 +7,14 @@ spec:
   parentRefs:
     - name: home-gateway
       namespace: gateway-system
+      sectionName: https
   hostnames:
-    - gitlab.system
+    - gitlab.home.lan
   rules:
-    - backendRefs:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
         - name: gitlab-webservice-default
           port: 8181

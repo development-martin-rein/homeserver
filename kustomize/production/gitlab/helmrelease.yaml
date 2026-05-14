@@ -25,10 +25,10 @@ spec:
       edition: ce
 
       hosts:
-        domain: system
-        https: false
+        domain: home.lan
+        https: true
         gitlab:
-          name: gitlab.system
+          name: gitlab.home.lan
 
       ingress:
         enabled: false
