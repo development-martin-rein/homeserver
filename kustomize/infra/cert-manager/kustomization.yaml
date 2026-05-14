@@ -5,4 +5,6 @@ resources:
   - namespace.yaml
   - helmrepository.yaml
   - helmrelease.yaml
-  - home-lan-clusterissuer.yaml
+  - home-lan-selfsigned-clusterissuer.yaml
+  - home-lan-ca-certificate.yaml
+  - home-lan-ca-clusterissuer.yaml
