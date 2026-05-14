@@ -12,16 +12,14 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-  # Optional später: HTTPS Listener mit Zertifikat
-  # listeners:
-  #   - name: https
-  #     protocol: HTTPS
-  #     port: 443
-  #     tls:
-  #       mode: Terminate
-  #       certificateRefs:
-  #         - name: home-gateway-tls
-  #           kind: Secret
-  #     allowedRoutes:
-  #       namespaces:
-  #         from: All
+    - name: https
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: home-gateway-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: All
