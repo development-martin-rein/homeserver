@@ -9,7 +9,7 @@ spec:
       namespace: gateway-system
       sectionName: https
   hostnames:
-    - nextcloud.staging.home.lan
+    - nextcloud-staging.home.lan
   rules:
     - matches:
         - path:
