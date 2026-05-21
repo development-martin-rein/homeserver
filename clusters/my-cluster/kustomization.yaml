@@ -13,7 +13,7 @@ resources:
 
   - production-apps-gitlab-postgresql.yaml
   - production-apps-gitlab-valkey.yaml
-  - production-apps-gitlab-object-storage.yaml
+  - production-apps-gitlab-minio.yaml
   - production-apps-gitlab.yaml
   - production-apps-nextcloud-db.yaml
   - production-apps-nextcloud.yaml
