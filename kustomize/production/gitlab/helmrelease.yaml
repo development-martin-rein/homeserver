@@ -45,7 +45,6 @@ spec:
         enabled: false
         installEnvoy: false
         configureCertmanager: false
-
       storage:
         class: longhorn
 
