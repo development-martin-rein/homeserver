@@ -5,7 +5,7 @@ metadata:
   namespace: obsidian-livesync-production
 spec:
   parentRefs:
-    - name: gateway
+    - name: home-gateway
       namespace: gateway-system
   hostnames:
     - obsidian-sync.home.lan
