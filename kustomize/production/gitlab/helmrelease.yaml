@@ -42,6 +42,8 @@ spec:
           enabled: false
 
       gatewayApi:
+        enabled: false
+        installEnvoy: false
         configureCertmanager: false
 
       storage:
