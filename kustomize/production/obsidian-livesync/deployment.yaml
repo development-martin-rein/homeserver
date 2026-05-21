@@ -34,7 +34,13 @@ spec:
           volumeMounts:
             - name: couchdb-data
               mountPath: /opt/couchdb/data
+            - name: couchdb-config
+              mountPath: /opt/couchdb/etc/local.d/obsidian.ini
+              subPath: obsidian.ini
       volumes:
         - name: couchdb-data
           persistentVolumeClaim:
             claimName: couchdb-data
+        - name: couchdb-config
+          configMap:
+            name: couchdb-config
