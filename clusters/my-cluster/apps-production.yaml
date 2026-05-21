@@ -14,5 +14,4 @@ spec:
   path: ./kustomize/production
   dependsOn:
     - name: cluster-infra
-    - name: cluster-apps-staging
   timeout: 30m
