@@ -20,6 +20,9 @@ spec:
 
   install:
     createNamespace: true
+    crds: Skip
+  upgrade:
+    crds: Skip
 
   values:
     envoyProxy:
