@@ -135,10 +135,6 @@ spec:
     prometheus:
       install: false
 
-    gitlab-exporter:
-      enabled: false
-
-
     gitlab-runner:
       install: false
 
@@ -155,6 +151,9 @@ spec:
       enabled: false
 
     gitlab:
+      gitlab-exporter:
+        enabled: false
+
       webservice:
         minReplicas: 1
         maxReplicas: 1
