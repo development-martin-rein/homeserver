@@ -1,0 +1,8 @@
+
+# SOPS age private key
+/secrets/age/age.agekey
+
+# Lokale unverschlüsselte Secret-Dateien
+/secrets/*.plain.yaml
+/secrets/*.local.yaml
+/secrets/secrets.yaml
