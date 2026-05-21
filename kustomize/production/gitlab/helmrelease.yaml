@@ -136,6 +136,10 @@ spec:
     prometheus:
       install: false
 
+    gitlab-exporter:
+      enabled: false
+
+
     gitlab-runner:
       install: false
 
