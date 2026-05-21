@@ -71,61 +71,32 @@ spec:
         enabled: false
 
       appConfig:
+        object_store:
+          enabled: false
+
         lfs:
           enabled: false
-          bucket: gitlab-lfs
-          connection:
-            secret: gitlab-object-storage
-            key: connection
 
         artifacts:
           enabled: false
-          bucket: gitlab-artifacts
-          connection:
-            secret: gitlab-object-storage
-            key: connection
 
         uploads:
           enabled: false
-          bucket: gitlab-uploads
-          connection:
-            secret: gitlab-object-storage
-            key: connection
 
         packages:
           enabled: false
-          bucket: gitlab-packages
-          connection:
-            secret: gitlab-object-storage
-            key: connection
 
         externalDiffs:
           enabled: false
-          bucket: gitlab-mr-diffs
-          connection:
-            secret: gitlab-object-storage
-            key: connection
 
         terraformState:
           enabled: false
-          bucket: gitlab-terraform-state
-          connection:
-            secret: gitlab-object-storage
-            key: connection
 
         ciSecureFiles:
           enabled: false
-          bucket: gitlab-ci-secure-files
-          connection:
-            secret: gitlab-object-storage
-            key: connection
 
         dependencyProxy:
           enabled: false
-          bucket: gitlab-dependency-proxy
-          connection:
-            secret: gitlab-object-storage
-            key: connection
 
     installCertmanager: false
 
