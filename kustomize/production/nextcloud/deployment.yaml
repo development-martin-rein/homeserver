@@ -4,7 +4,7 @@ metadata:
   name: nextcloud
   namespace: nextcloud-production
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: nextcloud
@@ -37,8 +37,8 @@ spec:
                   name: nextcloud-mariadb
                   key: password
             # Optional:
-            # - name: NEXTCLOUD_TRUSTED_DOMAINS
-            #   value: "nextcloud.home.lan"
+            - name: NEXTCLOUD_TRUSTED_DOMAINS
+              value: "nextcloud.home.lan"
           volumeMounts:
             - name: nextcloud-data
               mountPath: /var/www/html
