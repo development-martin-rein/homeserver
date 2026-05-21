@@ -1,7 +1,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cluster-apps-production
+  name: production-apps-gitlab-postgresql
   namespace: flux-system
 spec:
   interval: 10m
@@ -11,7 +11,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kustomize/production
+  path: ./kustomize/production/gitlab-postgresql
   dependsOn:
-    - name: infra-gateway
-  timeout: 30m
+    - name: infra-cloudnative-pg
+  timeout: 10m

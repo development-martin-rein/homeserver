@@ -1,0 +1,21 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: production-apps-gitlab
+  namespace: flux-system
+spec:
+  interval: 10m
+  retryInterval: 2m
+  wait: true
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./kustomize/production/gitlab
+  dependsOn:
+    - name: infra-gateway
+    - name: infra-cloudnative-pg
+    - name: production-apps-gitlab-postgresql
+    - name: production-apps-gitlab-valkey
+    - name: production-apps-gitlab-object-storage
+  timeout: 30m
