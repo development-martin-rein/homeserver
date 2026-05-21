@@ -18,5 +18,3 @@ data:
     methods = GET, PUT, POST, HEAD, DELETE
     headers = accept, authorization, content-type, origin, referer
 
-    [couchdb]
-    single_node = true
