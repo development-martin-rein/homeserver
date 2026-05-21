@@ -5,3 +5,4 @@ resources:
   - nextcloud
   - mariadb-nextcloud
   - gitlab
+  - obsidian-livesync
