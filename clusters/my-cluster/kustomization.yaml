@@ -11,10 +11,10 @@ resources:
   - infra-envoy-gateway.yaml
   - infra-gateway.yaml
 
-  - production-apps-gitlab-postgresql.yaml
-  - production-apps-gitlab-valkey.yaml
-  - production-apps-gitlab-object-storage.yaml
-  - production-apps-gitlab.yaml
+#  - production-apps-gitlab-postgresql.yaml
+#  - production-apps-gitlab-valkey.yaml
+#  - production-apps-gitlab-object-storage.yaml
+#  - production-apps-gitlab.yaml
   - production-apps-nextcloud-db.yaml
   - production-apps-nextcloud.yaml
   - production-apps-obsidian-livesync.yaml
