@@ -13,5 +13,5 @@ spec:
     name: flux-system
   path: ./kustomize/staging
   dependsOn:
-    - name: cluster-infra       # erst Infra, dann Staging-Anwendungen
+    - name: infra-gateway       # erst Infra, dann Staging-Anwendungen
   timeout: 10m

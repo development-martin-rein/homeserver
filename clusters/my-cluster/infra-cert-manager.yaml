@@ -1,17 +1,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cluster-apps-production
+  name: infra-cert-manager
   namespace: flux-system
 spec:
   interval: 10m
-  retryInterval: 2m
-  wait: true
+  path: ./kustomize/infra/cert-manager
   prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./kustomize/production
-  dependsOn:
-    - name: infra-gateway
-  timeout: 30m
+  timeout: 5m
+  wait: true
