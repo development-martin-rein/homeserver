@@ -13,3 +13,4 @@ resources:
   - infrastructure/metallb
   - infrastructure/envoy-gateway
   - infrastructure/gateway
+  - application
