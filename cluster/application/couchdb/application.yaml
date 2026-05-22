@@ -5,10 +5,52 @@ metadata:
   namespace: argocd
 spec:
   project: homeserver
-  source:
-    repoURL: https://github.com/development-martin-rein/homeserver.git
-    targetRevision: main
-    path: application/couchdb
+  sources:
+    - repoURL: https://apache.github.io/couchdb-helm
+      chart: couchdb
+      targetRevision: 4.6.3
+      helm:
+        releaseName: couchdb
+        values: |
+          clusterSize: 1
+
+          allowAdminParty: false
+          createAdminSecret: false
+
+          persistentVolume:
+            enabled: true
+            storageClass: longhorn
+            size: 20Gi
+            accessModes:
+              - ReadWriteOnce
+
+          service:
+            enabled: true
+            type: ClusterIP
+            externalPort: 5984
+
+          couchdbConfig:
+            chttpd:
+              bind_address: any
+              require_valid_user: false
+              enable_cors: true
+            cors:
+              credentials: true
+              origins: app://obsidian.md,capacitor://localhost,http://localhost,https://obsidian-sync.home.lan
+              methods: GET, PUT, POST, HEAD, DELETE
+              headers: accept, authorization, content-type, origin, referer
+
+          livenessProbe:
+            enabled: true
+            initialDelaySeconds: 30
+
+          readinessProbe:
+            enabled: true
+            initialDelaySeconds: 30
+
+    - repoURL: https://github.com/development-martin-rein/homeserver.git
+      targetRevision: main
+      path: application/couchdb
   destination:
     server: https://kubernetes.default.svc
     namespace: couchdb
