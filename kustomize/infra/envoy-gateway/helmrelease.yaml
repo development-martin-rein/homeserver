@@ -9,7 +9,7 @@ spec:
   releaseName: eg
   chart:
     spec:
-      chart: .
+      chart: gateway-helm
       version: v1.7.2
       sourceRef:
         kind: HelmRepository
