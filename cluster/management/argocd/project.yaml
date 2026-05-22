@@ -12,6 +12,7 @@ spec:
     - https://charts.longhorn.io
     - https://cloudnative-pg.github.io/charts
     - https://valkey.io/valkey-helm/
+    - https://charts.external-secrets.io
 
   destinations:
     - namespace: '*'

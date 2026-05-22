@@ -7,3 +7,4 @@ resources:
   - infrastructure/longhorn
   - infrastructure/postgresql
   - infrastructure/valkey
+  - infrastructure/external-secret
