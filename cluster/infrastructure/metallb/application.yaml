@@ -12,6 +12,17 @@ spec:
     targetRevision: 0.16.0
     helm:
       releaseName: metallb
+      values: |
+        prometheus:
+          serviceMonitor:
+            enabled: false
+          podMonitor:
+            enabled: false
+          prometheusRule:
+            enabled: false
+
+        frrk8s:
+          enabled: false
 
   destination:
     server: https://kubernetes.default.svc
