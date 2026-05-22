@@ -8,4 +8,4 @@ resources:
   - infrastructure/postgresql
   - infrastructure/valkey
   - infrastructure/external-secret
-  - management/infisical/database
+  - management/infisical

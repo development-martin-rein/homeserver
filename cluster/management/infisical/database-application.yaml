@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: infisical-database
+  namespace: argocd
+spec:
+  project: homeserver
+
+  source:
+    repoURL: https://github.com/development-martin-rein/homeserver.git
+    targetRevision: main
+    path: cluster/management/infisical/database
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: infisical
+
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
