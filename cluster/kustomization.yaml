@@ -5,3 +5,4 @@ resources:
   - management/argocd
   - infrastructure/cert-manager
   - infrastructure/longhorn
+  - infrastructure/postgresql

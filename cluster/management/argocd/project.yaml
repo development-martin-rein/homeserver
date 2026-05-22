@@ -10,6 +10,7 @@ spec:
     - https://github.com/development-martin-rein/homeserver.git
     - quay.io/jetstack/charts
     - https://charts.longhorn.io
+    - https://cloudnative-pg.github.io/charts
 
   destinations:
     - namespace: '*'
