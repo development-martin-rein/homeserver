@@ -13,6 +13,7 @@ spec:
     - https://cloudnative-pg.github.io/charts
     - https://valkey.io/valkey-helm/
     - https://charts.external-secrets.io
+    - https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts/
 
   destinations:
     - namespace: '*'
