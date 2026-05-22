@@ -6,48 +6,40 @@ metadata:
 spec:
   interval: 30m
   timeout: 60m
-
   chart:
     spec:
       chart: gitlab
-      version: "10.0.0"
+      version: 10.0.0
       sourceRef:
         kind: HelmRepository
         name: gitlab
         namespace: gitlab-production
       interval: 12h
-
   install:
     remediation:
       retries: 0
-
   upgrade:
     remediation:
       retries: 0
-
   values:
     global:
       edition: ce
-
       hosts:
         domain: home.lan
         https: true
         gitlab:
           name: gitlab.home.lan
-
       ingress:
         enabled: false
         configureCertmanager: false
         tls:
           enabled: false
-
       gatewayApi:
         enabled: false
         installEnvoy: false
         configureCertmanager: false
       storage:
         class: longhorn
-
       psql:
         host: gitlab-postgresql-rw.gitlab-production.svc.cluster.local
         port: 5432
@@ -57,7 +49,6 @@ spec:
         password:
           secret: gitlab-postgresql-app
           key: password
-
       redis:
         host: gitlab-valkey.gitlab-production.svc.cluster.local
         port: 6379
@@ -66,86 +57,101 @@ spec:
           enabled: true
           secret: gitlab-valkey
           key: password
-
       minio:
         enabled: false
-
       appConfig:
         object_store:
-          enabled: false
-
+          enabled: true
+          connection:
+            secret: gitlab-minio
+            key: connection
         lfs:
-          enabled: false
-
+          enabled: true
+          bucket: gitlab-lfs
+          proxy_download: true
+          connection: &id001
+            secret: gitlab-minio
+            key: connection
         artifacts:
-          enabled: false
-
+          enabled: true
+          bucket: gitlab-artifacts
+          proxy_download: true
+          connection: *id001
         uploads:
-          enabled: false
-
+          enabled: true
+          bucket: gitlab-uploads
+          proxy_download: true
+          connection: *id001
         packages:
-          enabled: false
-
+          enabled: true
+          bucket: gitlab-packages
+          proxy_download: true
+          connection: *id001
         externalDiffs:
-          enabled: false
-
+          enabled: true
+          bucket: gitlab-mr-diffs
+          proxy_download: true
+          connection: *id001
         terraformState:
-          enabled: false
-
+          enabled: true
+          bucket: gitlab-terraform-state
+          connection: *id001
         ciSecureFiles:
-          enabled: false
-
+          enabled: true
+          bucket: gitlab-ci-secure-files
+          connection: *id001
         dependencyProxy:
-          enabled: false
-
+          enabled: true
+          bucket: gitlab-dependency-proxy
+          connection: *id001
+        agentPlanContent:
+          enabled: true
+          bucket: gitlab-agent-plan-content
+          connection: *id001
+        backups:
+          bucket: gitlab-backups
+          tmpBucket: gitlab-tmp
+          objectStorage:
+            backend: s3
+      registry:
+        bucket: gitlab-registry
     installCertmanager: false
-
     nginx-ingress:
       enabled: false
-
     prometheus:
       install: false
-
     gitlab-runner:
       install: false
-
     registry:
-      enabled: false
-
+      enabled: true
+      storage:
+        secret: gitlab-registry-storage
+        key: config
     postgresql:
       install: false
-
     redis:
       install: false
-
     minio:
       enabled: false
-
     gitlab:
       gitlab-exporter:
         enabled: false
-
       webservice:
         minReplicas: 1
         maxReplicas: 1
-
       sidekiq:
         minReplicas: 1
         maxReplicas: 1
-
       gitlab-shell:
         minReplicas: 1
         maxReplicas: 1
-
       kas:
         minReplicas: 1
         maxReplicas: 1
-
       gitaly:
         persistence:
           storageClass: longhorn
           size: 50Gi
-
       toolbox:
         persistence:
           storageClass: longhorn
