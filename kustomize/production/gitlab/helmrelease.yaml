@@ -69,45 +69,34 @@ spec:
           enabled: true
           bucket: gitlab-lfs
           proxy_download: true
-          connection: &id001
-            secret: gitlab-minio
-            key: connection
         artifacts:
           enabled: true
           bucket: gitlab-artifacts
           proxy_download: true
-          connection: *id001
         uploads:
           enabled: true
           bucket: gitlab-uploads
           proxy_download: true
-          connection: *id001
         packages:
           enabled: true
           bucket: gitlab-packages
           proxy_download: true
-          connection: *id001
         externalDiffs:
           enabled: true
           bucket: gitlab-mr-diffs
           proxy_download: true
-          connection: *id001
         terraformState:
           enabled: true
           bucket: gitlab-terraform-state
-          connection: *id001
         ciSecureFiles:
           enabled: true
           bucket: gitlab-ci-secure-files
-          connection: *id001
         dependencyProxy:
           enabled: true
           bucket: gitlab-dependency-proxy
-          connection: *id001
         agentPlanContent:
           enabled: true
           bucket: gitlab-agent-plan-content
-          connection: *id001
         backups:
           bucket: gitlab-backups
           tmpBucket: gitlab-tmp
