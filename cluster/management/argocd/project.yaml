@@ -15,6 +15,7 @@ spec:
     - https://charts.external-secrets.io
     - https://dl.cloudsmith.io/public/infisical/helm-charts/helm/charts/
     - https://metallb.github.io/metallb
+    - https://apache.github.io/couchdb-helm
 
   destinations:
     - namespace: '*'
