@@ -10,6 +10,7 @@ spec:
     - infisical.home.lan
     - nextcloud.home.lan
     - gitlab.home.lan
+    - obsidian-sync.home.lan
   issuerRef:
     kind: ClusterIssuer
     name: home-lan-ca
