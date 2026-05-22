@@ -6,7 +6,7 @@ metadata:
 spec:
   project: homeserver
   source:
-    repoURL: https://github.com/MartinRein/homeserver.git
+    repoURL: https://github.com/development-martin-rein/homeserver.git
     targetRevision: main
     path: application/couchdb
   destination:
