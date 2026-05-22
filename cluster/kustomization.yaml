@@ -10,3 +10,4 @@ resources:
   - infrastructure/external-secret
   - management/infisical
   - infrastructure/certificate-authority
+  - infrastructure/metallb
