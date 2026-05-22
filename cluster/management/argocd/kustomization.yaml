@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - project.yaml
   - root-application.yaml
+  - argocd-cmd-params-cm.yaml
