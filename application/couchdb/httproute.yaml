@@ -12,5 +12,5 @@ spec:
     - obsidian-sync.home.lan
   rules:
     - backendRefs:
-        - name: couchdb-svs-couchdb
+        - name: couchdb-svc-couchdb
           port: 5984
