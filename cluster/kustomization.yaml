@@ -12,3 +12,4 @@ resources:
   - infrastructure/certificate-authority
   - infrastructure/metallb
   - infrastructure/envoy-gateway
+  - infrastructure/gateway
