@@ -9,3 +9,4 @@ resources:
   - infrastructure/valkey
   - infrastructure/external-secret
   - management/infisical
+  - infrastructure/certificate-authority
