@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: valkey
+  namespace: argocd
+spec:
+  project: homeserver
+
+  source:
+    repoURL: https://valkey.io/valkey-helm/
+    chart: valkey
+    targetRevision: 0.4.0
+    helm:
+      releaseName: valkey
+      values: |
+        replicas: 1
+
+        storage:
+          enabled: true
+          size: 8Gi
+          storageClassName: longhorn
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: valkey-system
+
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

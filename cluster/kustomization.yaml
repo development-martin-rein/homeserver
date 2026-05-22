@@ -6,3 +6,4 @@ resources:
   - infrastructure/cert-manager
   - infrastructure/longhorn
   - infrastructure/postgresql
+  - infrastructure/valkey

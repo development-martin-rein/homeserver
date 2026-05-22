@@ -11,6 +11,7 @@ spec:
     - quay.io/jetstack/charts
     - https://charts.longhorn.io
     - https://cloudnative-pg.github.io/charts
+    - https://valkey.io/valkey-helm/
 
   destinations:
     - namespace: '*'
