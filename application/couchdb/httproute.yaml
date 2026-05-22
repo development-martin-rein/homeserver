@@ -7,9 +7,10 @@ spec:
   parentRefs:
     - name: home-gateway
       namespace: gateway-system
+      sectionName: https
   hostnames:
     - obsidian-sync.home.lan
   rules:
     - backendRefs:
-        - name: couchdb-couchdb
+        - name: couchdb-svs-couchdb
           port: 5984
