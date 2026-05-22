@@ -5,7 +5,7 @@ metadata:
   namespace: gitlab-production
 spec:
   interval: 30m
-  timeout: 30m
+  timeout: 60m
 
   chart:
     spec:
@@ -19,11 +19,11 @@ spec:
 
   install:
     remediation:
-      retries: 3
+      retries: 0
 
   upgrade:
     remediation:
-      retries: 3
+      retries: 0
 
   values:
     global:
@@ -130,6 +130,14 @@ spec:
         maxReplicas: 1
 
       sidekiq:
+        minReplicas: 1
+        maxReplicas: 1
+
+      gitlab-shell:
+        minReplicas: 1
+        maxReplicas: 1
+
+      kas:
         minReplicas: 1
         maxReplicas: 1
 

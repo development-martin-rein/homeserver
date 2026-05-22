@@ -17,5 +17,4 @@ spec:
     - name: infra-cloudnative-pg
     - name: production-apps-gitlab-postgresql
     - name: production-apps-gitlab-valkey
-    - name: production-apps-gitlab-minio
   timeout: 30m
