@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - database-application.yaml
   - application.yaml
+  - httproute.yaml
