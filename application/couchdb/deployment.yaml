@@ -31,6 +31,11 @@ spec:
                 secretKeyRef:
                   name: couchdb-secret
                   key: COUCHDB_PASSWORD
+            - name: COUCHDB_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: couchdb-secret
+                  key: COUCHDB_SECRET
           volumeMounts:
             - name: data
               mountPath: /opt/couchdb/data
