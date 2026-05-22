@@ -11,3 +11,4 @@ resources:
   - management/infisical
   - infrastructure/certificate-authority
   - infrastructure/metallb
+  - infrastructure/envoy-gateway
