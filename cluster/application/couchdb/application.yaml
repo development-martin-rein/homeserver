@@ -30,6 +30,8 @@ spec:
             externalPort: 5984
 
           couchdbConfig:
+            couchdb:
+              uuid: "f0e3672d-010b-4ead-af12-4eb8aa62198e"
             chttpd:
               bind_address: any
               require_valid_user: false
