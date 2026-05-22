@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: couchdb-config
+  namespace: couchdb
+data:
+  local.ini: |
+    [chttpd]
+    enable_cors = true
+
+    [cors]
+    credentials = true
+    origins = app://obsidian.md,capacitor://localhost,http://localhost,https://obsidian-sync.home.lan
+    methods = GET, PUT, POST, HEAD, DELETE
+    headers = accept, authorization, content-type, origin, referer
