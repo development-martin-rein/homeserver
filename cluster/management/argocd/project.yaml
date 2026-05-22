@@ -8,6 +8,7 @@ spec:
 
   sourceRepos:
     - https://github.com/development-martin-rein/homeserver.git
+    - quay.io/jetstack/charts
 
   destinations:
     - namespace: '*'
