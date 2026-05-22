@@ -32,7 +32,7 @@ spec:
 
       containers:
         - name: couchdb
-          image: couchdb:3.4
+          image: apache/couchdb:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

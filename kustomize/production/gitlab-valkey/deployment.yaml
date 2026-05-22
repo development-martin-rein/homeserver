@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: valkey
-          image: valkey/valkey:8-alpine
+          image: valkey/valkey:latest
           ports:
             - name: redis
               containerPort: 6379

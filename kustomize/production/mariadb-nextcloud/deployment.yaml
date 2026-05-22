@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: mariadb
-          image: mariadb:11.4
+          image: mariadb:latest
           env:
             - name: MARIADB_ROOT_PASSWORD
               valueFrom:
