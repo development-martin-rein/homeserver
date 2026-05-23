@@ -3,4 +3,4 @@ kind: Kustomization
 
 resources:
   - application.yaml
-  - configuration-application.yaml
+  - configuration

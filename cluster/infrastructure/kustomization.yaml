@@ -2,12 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - certificate-authority
   - cert-manager
-  - envoy-gateway
   - external-secret
-  - gateway
-  - longhorn
+  - certificate-authority
   - metallb
-  - postgresql
-  - valkey
+  - envoy-gateway
+  - gateway
+  - technitium-dns

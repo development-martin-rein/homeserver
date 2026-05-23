@@ -4,5 +4,4 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - external-secret.yaml
-  - couchdb-application.yaml
   - httproute.yaml
