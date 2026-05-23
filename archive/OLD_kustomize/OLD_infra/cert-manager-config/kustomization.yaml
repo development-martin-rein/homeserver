@@ -1,4 +1,0 @@
-resources:
-- home-lan-ca-certificate.yaml
-- home-lan-ca-clusterissuer.yaml
-- home-lan-selfsigned-clusterissuer.yaml
