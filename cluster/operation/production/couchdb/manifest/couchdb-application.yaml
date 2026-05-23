@@ -17,6 +17,11 @@ spec:
       values: |
         createAdminSecret: false
 
+
+        couchdbConfig:
+          couchdb:
+            uuid: 7f4c1f6e-8c1b-4a6a-9d13-0f2b5d8e8b6f
+
         persistentVolume:
           enabled: true
           storageClass: longhorn
