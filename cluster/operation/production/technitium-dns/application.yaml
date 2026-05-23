@@ -4,7 +4,7 @@ metadata:
   name: technitium-dns
   namespace: argocd
 spec:
-  project: default
+  project: homeserver
 
   source:
     repoURL: https://github.com/development-martin-rein/homeserver.git

@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: couchdb-instance
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: homeserver
+
+  source:
+    repoURL: https://apache.github.io/couchdb-helm
+    chart: couchdb
+    targetRevision: 4.6.0
+    helm:
+      releaseName: couchdb
+      values: |
+        createAdminSecret: false
+
+        persistentVolume:
+          enabled: true
+          storageClass: longhorn
+          size: 5Gi
+
+        service:
+          enabled: true
+          type: ClusterIP
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: couchdb
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
