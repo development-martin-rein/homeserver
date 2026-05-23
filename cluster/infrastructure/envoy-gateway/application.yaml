@@ -4,7 +4,7 @@ metadata:
   name: envoy-gateway
   namespace: argocd
 spec:
-  project: default
+  project: homeserver
   source:
     repoURL: oci://docker.io/envoyproxy/gateway-helm
     chart: gateway-helm
