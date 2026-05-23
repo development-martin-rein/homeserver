@@ -11,6 +11,7 @@ spec:
     - nextcloud.home.lan
     - gitlab.home.lan
     - obsidian-sync.home.lan
+    - technitium.home.lan
   issuerRef:
     kind: ClusterIssuer
     name: home-lan-ca
