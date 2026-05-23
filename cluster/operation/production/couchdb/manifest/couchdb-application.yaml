@@ -43,6 +43,16 @@ spec:
     server: https://kubernetes.default.svc
     namespace: couchdb
 
+  ignoreDifferences:
+    - group: apps
+      kind: StatefulSet
+      name: couchdb-couchdb
+      namespace: couchdb
+      jsonPointers:
+        - /spec/volumeClaimTemplates/0/apiVersion
+        - /spec/volumeClaimTemplates/0/kind
+        - /spec/volumeClaimTemplates/0/status
+
   syncPolicy:
     automated:
       prune: true
