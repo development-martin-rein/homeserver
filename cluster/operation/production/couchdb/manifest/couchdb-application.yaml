@@ -26,6 +26,8 @@ spec:
           enabled: true
           storageClass: longhorn
           size: 20Gi
+          accessModes: 
+            - ReadWriteOnce
 
         persistentVolumeClaimRetentionPolicy:
           enabled: true
@@ -35,6 +37,7 @@ spec:
         service:
           enabled: true
           type: ClusterIP
+          sessionAffinity: ClientIP
 
   destination:
     server: https://kubernetes.default.svc
