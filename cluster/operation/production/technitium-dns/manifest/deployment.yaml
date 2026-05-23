@@ -31,7 +31,10 @@ spec:
             - name: DNS_SERVER_DOMAIN
               value: technitium.home.lan
             - name: DNS_SERVER_ADMIN_PASSWORD
-              value: "BitteHierEinStarkesPasswortSetzen"
+              valueFrom:
+                secretKeyRef:
+                  name: technitium-secret
+                  key: adminPassword
             - name: DNS_SERVER_FORWARDERS
               value: "192.168.178.1"
           volumeMounts:
