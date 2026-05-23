@@ -17,8 +17,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      labels:
-        app.kubernetes.io/name: technitium
     spec:
       containers:
         - name: technitium
