@@ -17,6 +17,10 @@ spec:
           size: 20Gi
           storageClass: longhorn
 
+        couchdbConfig:
+          couchdb:
+            uuid: "7f4c1f6e-8c1b-4a6a-9d13-0f2b5d8e8b6f"
+
         createAdminSecret: false
 
         adminUsername: admin
