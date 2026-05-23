@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium
+  namespace: technitium-dns
+  labels:
+    app.kubernetes.io/name: technitium
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.178.250
+  selector:
+    app.kubernetes.io/name: technitium
+  ports:
+    - name: dns-udp
+      port: 53
+      targetPort: dns-udp
+      protocol: UDP
+    - name: dns-tcp
+      port: 53
+      targetPort: dns-tcp
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: technitium-web
+  namespace: technitium-dns
+  labels:
+    app.kubernetes.io/name: technitium
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: technitium
+  ports:
+    - name: web
+      port: 5380
+      targetPort: web
+      protocol: TCP

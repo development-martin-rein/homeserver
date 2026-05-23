@@ -8,4 +8,4 @@ resources:
   - metallb
   - envoy-gateway
   - gateway
-  - technitium-dns
+  - technitium-dns/application.yaml
