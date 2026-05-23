@@ -10,7 +10,6 @@ spec:
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: home-gateway
-    - name: home-gateway
       namespace: gateway-system
       sectionName: https
   hostnames:
@@ -20,7 +19,6 @@ spec:
         - group: ''
           kind: Service
           name: couchdb-svc-couchdb
-        - name: couchdb-svc-couchdb
           port: 5984
           weight: 1
       matches:
