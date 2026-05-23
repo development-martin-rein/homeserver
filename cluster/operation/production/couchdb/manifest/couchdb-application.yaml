@@ -27,6 +27,11 @@ spec:
           storageClass: longhorn
           size: 20Gi
 
+        persistentVolumeClaimRetentionPolicy:
+          enabled: true
+          whenScaled: Retain
+          whenDeleted: Retain
+
         service:
           enabled: true
           type: ClusterIP
