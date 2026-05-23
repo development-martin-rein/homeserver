@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: technitium
   namespace: technitium-dns
-  labels:
+  label:
     app.kubernetes.io/name: technitium
 spec:
   replicas: 1
@@ -12,6 +12,11 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: technitium
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -21,6 +26,14 @@ spec:
         - name: technitium
           image: technitium/dns-server:15.2.0
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            successThreshold: 1
+            tcpSocket:
+              port: 5380
+            timeoutSeconds: 1
 
           ports:
             - name: dns-udp
@@ -32,6 +45,15 @@ spec:
             - name: web
               containerPort: 5380
               protocol: TCP
+
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 5380
+            timeoutSeconds: 1
 
           env:
             - name: DNS_SERVER_DOMAIN

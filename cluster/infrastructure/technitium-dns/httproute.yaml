@@ -7,10 +7,19 @@ spec:
   hostnames:
     - technitium.home.lan
   parentRefs:
-    - name: home-gateway
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: home-gateway
       namespace: gateway-system
       sectionName: https
   rules:
     - backendRefs:
-        - name: technitium-web
+        - group: ''
+          kind: Service
+          name: technitium-web
           port: 5380
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
