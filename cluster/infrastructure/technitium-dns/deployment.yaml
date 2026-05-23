@@ -1,10 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: technitium
-  namespace: technitium-dns
+  annotations:
+    argocd.argoproj.io/tracking-id: technitium-dns:apps/Deployment:technitium-dns/technitium
   label:
     app.kubernetes.io/name: technitium
+  name: technitium
+  namespace: technitium-dns
+
 spec:
   replicas: 1
   selector:
@@ -16,7 +19,7 @@ spec:
       maxUnavailable: 25%
     type: RollingUpdate
   template:
-    metadata:
+    metadata: null
     spec:
       containers:
         - name: technitium
