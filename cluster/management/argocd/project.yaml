@@ -7,6 +7,7 @@ spec:
   description: Homeserver project managed by Argo CD
 
   sourceRepos:
+    - oci://docker.io/envoyproxy/gateway-helm
     - https://github.com/development-martin-rein/homeserver.git
     - quay.io/jetstack/charts
     - https://charts.longhorn.io
