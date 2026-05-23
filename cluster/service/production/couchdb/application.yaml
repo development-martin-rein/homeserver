@@ -28,6 +28,15 @@ spec:
         erlangFlags:
           setcookie: ""
 
+  ignoreDifferences:
+    - group: apps
+      kind: StatefulSet
+      name: couchdb-couchdb
+      namespace: couchdb
+      jsonPointers:
+        - /spec/volumeClaimTemplates/0/apiVersion
+        - /spec/volumeClaimTemplates/0/kind
+
   destination:
     server: https://kubernetes.default.svc
     namespace: couchdb
@@ -38,3 +47,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      - RespectIgnoreDifferences=true
