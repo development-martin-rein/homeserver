@@ -17,7 +17,7 @@ spec:
       maxUnavailable: 25%
     type: RollingUpdate
   template:
-    metadata: null
+    metadata: 
     spec:
       containers:
         - name: technitium
