@@ -15,13 +15,19 @@ spec:
   hostnames:
     - obsidian-sync.home.lan
   rules:
-    - backendRefs:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
         - group: ''
           kind: Service
           name: couchdb-svc-couchdb
           port: 5984
           weight: 1
-      matches:
-        - path:
-            type: PathPrefix
-            value: /
+      sessionPersistence:
+        sessionName: couchdb-route
+        type: Cookie
+        absoluteTimeout: 24h
+        cookieConfig:
+          lifetimeType: Permanent

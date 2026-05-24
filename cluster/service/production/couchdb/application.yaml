@@ -5,6 +5,7 @@ metadata:
   namespace: argocd
 spec:
   project: homeserver
+
   source:
     repoURL: https://apache.github.io/couchdb-helm
     chart: couchdb
@@ -12,6 +13,8 @@ spec:
     helm:
       releaseName: couchdb
       values: |
+        clusterSize: 3
+
         persistentVolume:
           enabled: true
           size: 20Gi
@@ -22,11 +25,14 @@ spec:
             uuid: "7f4c1f6e-8c1b-4a6a-9d13-0f2b5d8e8b6f"
 
         createAdminSecret: false
+        extraSecretName: couchdb-couchdb
+        adminUsernameKey: adminUsername
+        adminPasswordKey: adminPassword
+        cookieAuthSecretKey: cookieAuthSecret
+        erlangCookieKey: erlangCookie
 
-        adminUsername: admin
-        adminPassword: ""
         erlangFlags:
-          setcookie: ""
+          name: couchdb
 
   ignoreDifferences:
     - group: apps
@@ -40,6 +46,7 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: couchdb
+
   syncPolicy:
     automated:
       prune: false
