@@ -1,8 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels:
-    app.kubernetes.io/name: technitium
   name: technitium
   namespace: technitium-dns
 
@@ -17,7 +15,9 @@ spec:
       maxUnavailable: 25%
     type: RollingUpdate
   template:
-    metadata: 
+    metadata:
+      labels:
+        app.kubernetes.io/name: technitium 
     spec:
       containers:
         - name: technitium
