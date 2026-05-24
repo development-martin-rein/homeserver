@@ -1,9 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    argocd.argoproj.io/tracking-id: technitium-dns:apps/Deployment:technitium-dns/technitium
-  label:
+  labels:
     app.kubernetes.io/name: technitium
   name: technitium
   namespace: technitium-dns
